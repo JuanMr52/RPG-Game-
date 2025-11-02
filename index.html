@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Card Game - Prototipo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: #374151;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #4b5563;
+        }
+
+        .tab-btn.active {
+            background: #7c3aed;
+        }
+
+        .content {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .section-description {
+            color: #94a3b8;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .card {
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .class-card {
+            color: white;
+        }
+
+        .class-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .class-icon {
+            font-size: 2rem;
+        }
+
+        .class-hp {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .class-ability {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        .legendary {
+            background: #fbbf24;
+            color: black;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .legendary-title {
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .legendary-effect {
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+
+        .legendary-disadvantage {
+            font-size: 0.8rem;
+            color: #dc2626;
+        }
+
+        .ability-card {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        }
+
+        .ability-class {
+            color: #c4b5fd;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .ability-effect {
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .ability-bonus {
+            color: #fcd34d;
+            font-size: 0.85rem;
+        }
+
+        .item-card {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .disadvantage-card {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .mandatory-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #fcd34d;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .boss-card {
+            background: linear-gradient(135deg, #1f2937 0%, #000000 100%);
+            border: 2px solid #dc2626;
+        }
+
+        .boss-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .boss-stat {
+            background: rgba(220, 38, 38, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .boss-effect {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .boss-special {
+            background: rgba(251, 191, 36, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .boss-defeat {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.85rem;
+        }
+
+        .rules-section {
+            background: rgba(30, 58, 138, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .rules-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .rules-list {
+            list-style: disc;
+            margin-left: 25px;
+            color: #d1d5db;
+        }
+
+        .rules-list li {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 40px;
+            font-size: 0.85rem;
+        }
+
+        .bg-red { background: #dc2626; }
+        .bg-blue { background: #2563eb; }
+        .bg-purple { background: #7c3aed; }
+        .bg-yellow { background: #eab308; }
+        .bg-green { background: #059669; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RPG Card Game</h1>
+        <p class="subtitle">Prototipo Interactivo - PvP con Amenaza Común</p>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('classes')">Clases (5)</button>
+            <button class="tab-btn" onclick="showTab('abilities')">Habilidades (15)</button>
+            <button class="tab-btn" onclick="showTab('items')">Objetos (10)</button>
+            <button class="tab-btn" onclick="showTab('disadvantages')">Desventajas (10)</button>
+            <button class="tab-btn" onclick="showTab('bosses')">Jefes (10)</button>
+            <button class="tab-btn" onclick="showTab('rules')">Reglas</button>
+        </div>
+
+        <div class="content">
+            <!-- CLASES -->
+            <div id="classes" class="tab-content">
+                <h2 class="section-title">Clases Disponibles</h2>
+                <p class="section-description">Todos empiezan con 20 HP. Cada clase tiene ventajas únicas y 1 carta legendaria exclusiva.</p>
+                <div class="grid">
+                    <div class="card class-card bg-red">
+                        <div class="class-header">
+                            <span class="class-icon">⚔️</span>
+                            <span>Guerrero</span>
+                        </div>
+                        <div class="class-hp">HP Inicial: 20</div>
+                        <div class="class-ability">+1 armadura permanente, cartas de ataque físico +2 daño</div>
+                        <div class="legendary">
+                            <div class="legendary-title">⭐ Furia Berserker</div>
+                            <div class="legendary-effect">✓ 6 daño a todos los enemigos</div>
+                            <div class="legendary-disadvantage">✗ Pierdes 3 HP y no puedes defenderte siguiente turno</div>
+                        </div>
+                    </div>
+
+                    <div class="card class-card bg-blue">
+                        <div class="class-header">
+                            <span class="class-icon">⚡</span>
+                            <span>Mago</span>
+                        </div>
+                        <div class="class-hp">HP Inicial: 20</div>
+                        <div class="class-ability">Cartas de magia +2 daño, puede ignorar armadura</div>
+                        <div class="legendary">
+                            <div class="legendary-title">⭐ Colapso Arcano</div>
+                            <div class="legendary-effect">✓ 8 daño mágico + silencia habilidades</div>
+                            <div class="legendary-disadvantage">✗ Descarta 2 cartas y no puedes usar magia próximo turno</div>
+                        </div>
+                    </div>
+
+                    <div class="card class-card bg-purple">
+                        <div class="class-header">
+                            <span class="class-icon">🎯</span>
+                            <span>Pícaro</span>
+                        </div>
+                        <div class="class-hp">HP Inicial: 20</div>
+                        <div class="class-ability">20% evasión base, cartas de ataque tienen chance de crítico x2</div>
+                        <div class="legendary">
+                            <div class="legendary-title">⭐ Golpe en las Sombras</div>
+                            <div class="legendary-effect">✓ Crítico garantizado x3 + ignora armadura</div>
+                            <div class="legendary-disadvantage">✗ Si el enemigo sobrevive quedas aturdido 1 turno</div>
+                        </div>
+                    </div>
+
+                    <div class="card class-card bg-yellow">
+                        <div class="class-header">
+                            <span class="class-icon">❤️</span>
+                            <span>Clérigo</span>
+                        </div>
+                        <div class="class-hp">HP Inicial: 20</div>
+                        <div class="class-ability">+3 HP en curaciones, cartas de curación dan +1 armadura temporal</div>
+                        <div class="legendary">
+                            <div class="legendary-title">⭐ Milagro Divino</div>
+                            <div class="legendary-effect">✓ Cura 10 HP o revive jugador caído con 8 HP</div>
+                            <div class="legendary-disadvantage">✗ Pierdes próximo turno completo</div>
+                        </div>
+                    </div>
+
+                    <div class="card class-card bg-green">
+                        <div class="class-header">
+                            <span class="class-icon">🏹</span>
+                            <span>Cazador</span>
+                        </div>
+                        <div class="class-hp">HP Inicial: 20</div>
+                        <div class="class-ability">+1 daño en ataques a distancia, puede atacar sin contraataque</div>
+                        <div class="legendary">
+                            <div class="legendary-title">⭐ Flecha del Destino</div>
+                            <div class="legendary-effect">✓ 10 daño imbloqueable</div>
+                            <div class="legendary-disadvantage">✗ Destruyes tu arco (-1 daño permanente)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HABILIDADES -->
+            <div id="abilities" class="tab-content hidden">
+                <h2 class="section-title">Habilidades (Mazo Principal)</h2>
+                <p class="section-description">15 habilidades (3 por clase). Efecto base para todos, bonus si es tu clase.</p>
+                <div class="grid">
+                    <div class="card ability-card">
+                        <div class="card-title">Golpe Poderoso</div>
+                        <div class="ability-class">Guerrero</div>
+                        <div class="ability-effect">Base: 3 daño físico</div>
+                        <div class="ability-bonus">⭐ 5 daño</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Escudo Defensivo</div>
+                        <div class="ability-class">Guerrero</div>
+                        <div class="ability-effect">Base: +3 armadura</div>
+                        <div class="ability-bonus">⭐ +5 armadura</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Carga Brutal</div>
+                        <div class="ability-class">Guerrero</div>
+                        <div class="ability-effect">Base: 2 daño + empuja</div>
+                        <div class="ability-bonus">⭐ 4 daño + aturde</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Bola de Fuego</div>
+                        <div class="ability-class">Mago</div>
+                        <div class="ability-effect">Base: 3 daño mágico</div>
+                        <div class="ability-bonus">⭐ 5 daño + quema 1</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Barrera Arcana</div>
+                        <div class="ability-class">Mago</div>
+                        <div class="ability-effect">Base: +2 armadura mágica</div>
+                        <div class="ability-bonus">⭐ +4 armadura + refleja 1</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Rayo Congelante</div>
+                        <div class="ability-class">Mago</div>
+                        <div class="ability-effect">Base: 2 daño + ralentiza</div>
+                        <div class="ability-bonus">⭐ 4 daño + congela 1 turno</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Golpe Rápido</div>
+                        <div class="ability-class">Pícaro</div>
+                        <div class="ability-effect">Base: 2 daño + roba 1 carta</div>
+                        <div class="ability-bonus">⭐ 4 daño + roba 1 carta</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Evasión</div>
+                        <div class="ability-class">Pícaro</div>
+                        <div class="ability-effect">Base: Esquiva próximo ataque</div>
+                        <div class="ability-bonus">⭐ Esquiva + contraataca 2</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Puñalada Trasera</div>
+                        <div class="ability-class">Pícaro</div>
+                        <div class="ability-effect">Base: 3 daño</div>
+                        <div class="ability-bonus">⭐ 5 daño si enemigo debilitado</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Curación Menor</div>
+                        <div class="ability-class">Clérigo</div>
+                        <div class="ability-effect">Base: Cura 3 HP</div>
+                        <div class="ability-bonus">⭐ Cura 6 HP</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Bendición</div>
+                        <div class="ability-class">Clérigo</div>
+                        <div class="ability-effect">Base: +2 próximo ataque</div>
+                        <div class="ability-bonus">⭐ +3 y cura 2 HP</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Ira Divina</div>
+                        <div class="ability-class">Clérigo</div>
+                        <div class="ability-effect">Base: 4 daño sagrado</div>
+                        <div class="ability-bonus">⭐ 6 daño</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Disparo Certero</div>
+                        <div class="ability-class">Cazador</div>
+                        <div class="ability-effect">Base: 3 daño a distancia</div>
+                        <div class="ability-bonus">⭐ 4 daño sin contraataque</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Trampa</div>
+                        <div class="ability-class">Cazador</div>
+                        <div class="ability-effect">Base: Próximo atacante recibe 2</div>
+                        <div class="ability-bonus">⭐ Recibe 4 daño</div>
+                    </div>
+                    <div class="card ability-card">
+                        <div class="card-title">Lluvia de Flechas</div>
+                        <div class="ability-class">Cazador</div>
+                        <div class="ability-effect">Base: 2 daño a todos</div>
+                        <div class="ability-bonus">⭐ 3 daño a todos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OBJETOS -->
+            <div id="items" class="tab-content hidden">
+                <h2 class="section-title">Objetos (Mazo Principal)</h2>
+                <p class="section-description">10 objetos equipables. Todos pueden usarlos sin restricciones.</p>
+                <div class="grid">
+                    <div class="card item-card">
+                        <div class="card-title">Poción de Vida Menor</div>
+                        <div class="ability-effect">Cura 4 HP</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Poción de Vida Mayor</div>
+                        <div class="ability-effect">Cura 8 HP</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Poción de Maná</div>
+                        <div class="ability-effect">Roba 2 cartas</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Espada de Hierro</div>
+                        <div class="ability-effect">+2 daño permanente físico</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Armadura de Cuero</div>
+                        <div class="ability-effect">+2 armadura permanente</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Amuleto Mágico</div>
+                        <div class="ability-effect">+1 daño mágico permanente</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Botas de Velocidad</div>
+                        <div class="ability-effect">Juegas 2 cartas este turno</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Escudo Reforzado</div>
+                        <div class="ability-effect">+5 armadura este turno</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Veneno para Armas</div>
+                        <div class="ability-effect">Próximo ataque causa 2 durante 2 turnos</div>
+                    </div>
+                    <div class="card item-card">
+                        <div class="card-title">Piedra Curativa</div>
+                        <div class="ability-effect">Cura 2 HP por turno (3 turnos)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESVENTAJAS -->
+            <div id="disadvantages" class="tab-content hidden">
+                <h2 class="section-title">Desventajas (Mazo Principal)</h2>
+                
+                <h3 style="color: #fca5a5; font-size: 1.3rem; margin-bottom: 10px;">⚠️ Obligatorias (5 cartas)</h3>
+                <p class="section-description">Se aplican INMEDIATAMENTE al robarlas. Tu turno termina.</p>
+                <div class="grid" style="margin-bottom: 30px;">
+                    <div class="card disadvantage-card">
+                        <div class="mandatory-badge">⚠️ OBLIGATORIA</div>
+                        <div class="card-title">Trampa Explosiva</div>
+                        <div class="ability-effect">Pierdes 3 HP, descarta 1 carta, fin de turno</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="mandatory-badge">⚠️ OBLIGATORIA</div>
+                        <div class="card-title">Maldición Oscura</div>
+                        <div class="ability-effect">-2 todas habilidades (2 turnos), fin de turno</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="mandatory-badge">⚠️ OBLIGATORIA</div>
+                        <div class="card-title">Arma Destruida</div>
+                        <div class="ability-effect">Descarta 2 cartas ataque, fin de turno</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="mandatory-badge">⚠️ OBLIGATORIA</div>
+                        <div class="card-title">Colapso Mental</div>
+                        <div class="ability-effect">Pierde próximo turno completo</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="mandatory-badge">⚠️ OBLIGATORIA</div>
+                        <div class="card-title">Sangrado Severo</div>
+                        <div class="ability-effect">Pierdes 2 HP + 1 HP durante 3 turnos, fin turno</div>
+                    </div>
+                </div>
+
+                <h3 style="color: #fb923c; font-size: 1.3rem; margin-bottom: 10px;">Opcionales (5 cartas)</h3>
+                <p class="section-description">Puedes: Aplicártela y jugar normal, O descartarla pero pierdes tu turno.</p>
+                <div class="grid">
+                    <div class="card disadvantage-card">
+                        <div class="card-title">Envenenado</div>
+                        <div class="ability-effect">Pierdes 1 HP por turno (3 turnos)</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="card-title">Armadura Agrietada</div>
+                        <div class="ability-effect">-2 armadura permanente</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="card-title">Visión Borrosa</div>
+                        <div class="ability-effect">50% fallar próximos 2 ataques</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="card-title">Exhausto</div>
+                        <div class="ability-effect">Solo 1 carta próximo turno</div>
+                    </div>
+                    <div class="card disadvantage-card">
+                        <div class="card-title">Robo</div>
+                        <div class="ability-effect">Jugador roba 1 carta tuya al azar</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JEFES -->
+            <div id="bosses" class="tab-content hidden">
+                <h2 class="section-title">Jefes (Mazo de Jefes)</h2>
+                <p class="section-description">10 jefes diferentes. Se elige 1 al azar cada partida. El jefe pierde 1 HP por ronda y aplica su efecto.</p>
+                <div class="grid">
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Dragón Ancestral</span>
+                        </div>
+                        <div class="boss-stat">HP: 30 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Todos ganan 1 contador veneno (-1 HP/contador)</div>
+                        <div class="boss-special"><strong>Especial:</strong> Cura maldita (cada 3): Mayor HP cura 5 pero +3 veneno</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si 0 HP o todos tienen 5+ contadores</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>LICH REY ☠️</span>
+                        </div>
+                        <div class="boss-stat">HP: 50 | Dificultad: ★ SÚPER DIFÍCIL ★</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> TODOS pierden 3 HP, Lich cura 3 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Ejército (cada 3): Descarta 2 o pierde 5 HP | Apocalipsis (ronda 10): Todos -6 HP</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP antes de ronda 15, sino TODOS PIERDEN</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Hidra 3 Cabezas</span>
+                        </div>
+                        <div class="boss-stat">HP: 30 | Dificultad: Alta</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> 2 jugadores con más HP reciben 2 daño</div>
+                        <div class="boss-special"><strong>Especial:</strong> Regeneración (cada 10 HP): Cura 5 HP, ataca todos 3</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Demonio del Caos</span>
+                        </div>
+                        <div class="boss-stat">HP: 28 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Efecto aleatorio cada ronda</div>
+                        <div class="boss-special"><strong>Especial:</strong> Portal (cada 4): Dobla próximo efecto</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Titán de Piedra</span>
+                        </div>
+                        <div class="boss-stat">HP: 45 | Dificultad: Alta</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Jugador con más cartas pierde 3 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Armadura (impares): Daño x0.5 | Terremoto (cada 5): -4 HP y -1 carta</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si 0 HP o quedan menos de 2</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Reina Aracnida</span>
+                        </div>
+                        <div class="boss-stat">HP: 25 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Menor HP envuelto (no ataca) y -2 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Huevos (cada 3): Crías, todos -1 HP/ronda</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REGLAS -->
+            <div id="rules" class="tab-content hidden">
+                <h2 class="section-title">Reglas del Juego</h2>
+
+                <div class="rules-section">
+                    <h3 class="rules-title">⚙️ Setup</h3>
+                    <ul class="rules-list">
+                        <li>2-4 jugadores</li>
+                        <li>Cada jugador elige 1 clase y recibe su carta legendaria</li>
+                        <li>Se revela 1 jefe al azar del mazo de jefes</li>
+                        <li>Todos empiezan con 20 HP</li>
+                        <li>Mezcla el mazo principal (40 cartas)</li>
+                        <li>Cada jugador roba 6 cartas iniciales</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section" style="background: rgba(88, 28, 135, 0.3);">
+                    <h3 class="rules-title">🎮 Flujo de Turno</h3>
+                    <p style="color: white; font-weight: bold; margin-bottom: 10px;">1. Roba 1 carta del mazo principal</p>
+                    <ul class="rules-list">
+                        <li>Si robas desventaja OBLIGATORIA (⚠️): Se aplica automáticamente, tu turno termina</li>
+                        <li>Si robas desventaja OPCIONAL: Decides aplicártela y juegas normal, O descartarla pero pierdes turno</li>
+                        <li>Si robas carta normal: Continúas a paso 2</li>
+                    </ul>
+                    <p style="color: white; font-weight: bold; margin: 15px 0 10px;">2. Juega al menos 1 carta</p>
+                    <ul class="rules-list">
+                        <li>Límite de mano: 6 cartas máximo</li>
+                        <li>Puedes atacar a CUALQUIER jugador</li>
+                        <li>Puedes usar objetos, habilidades, o tu legendaria</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section" style="background: rgba(127, 29, 29, 0.3);">
+                    <h3 class="rules-title">💀 Fase del Jefe (Después de todos los turnos)</h3>
+                    <ul class="rules-list">
+                        <li>El jefe aplica su efecto de ronda</li>
+                        <li>El jefe pierde 1 HP</li>
+                        <li>Si tiene efecto especial en esta ronda, se activa</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section" style="background: rgba(6, 78, 59, 0.3);">
+                    <h3 class="rules-title">🏆 Condiciones de Victoria</h3>
+                    <ul class="rules-list">
+                        <li><strong>Victoria Individual:</strong> Si el jefe llega a 0 HP, gana el jugador con más HP restante</li>
+                        <li><strong>Derrota Grupal:</strong> Si todos los jugadores mueren antes que el jefe llegue a 0 HP, TODOS PIERDEN</li>
+                        <li><strong>Balance Crítico:</strong> Debes atacar rivales para ganar, pero sin debilitarte tanto que el jefe te mate</li>
+                    </ul>
+                </div>
+
+                <div class="rules-section" style="background: rgba(71, 85, 105, 0.5);">
+                    <h3 class="rules-title">📦 Componentes Totales</h3>
+                    <ul class="rules-list">
+                        <li>5 Cartas de Clase</li>
+                        <li>5 Cartas Legendarias (1 por clase)</li>
+                        <li>40 Cartas del Mazo Principal (15 habilidades + 10 objetos + 10 desventajas + 5 legendarias)</li>
+                        <li>10 Cartas de Jefes</li>
+                        <li><strong>TOTAL: 60 cartas para imprimir</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>RPG Card Game - Prototipo Interactivo</p>
+            <p style="margin-top: 5px;">60 cartas | 2-4 Jugadores | 20-30 minutos por partida</p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Desactivar todos los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabName).classList.remove('hidden');
+
+            // Activar el botón seleccionado
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html> Todos pierden 2 HP por ronda</div>
+                        <div class="boss-special"><strong>Especial:</strong> Aliento (rondas 5,10,15): 4 daño a todos</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP, gana jugador con más HP</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Nigromante Oscuro</span>
+                        </div>
+                        <div class="boss-stat">HP: 25 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Jugador con menos HP pierde 3 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Maldición (cada 3): Todos descartan 2</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP o quedan menos de 2 jugadores</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Kraken Profundidades</span>
+                        </div>
+                        <div class="boss-stat">HP: 35 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Jugador con MÁS HP pierde 3 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Maremoto (cada 4): Todos -1 carta y -1 HP</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP antes de ronda 20</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Gólem de Cristal</span>
+                        </div>
+                        <div class="boss-stat">HP: 40 | Dificultad: Media-Alta</div>
+                        <div class="boss-effect"><strong>Efecto:</strong> Daño mágico entre jugadores refleja 1 HP</div>
+                        <div class="boss-special"><strong>Especial:</strong> Terremoto (rondas pares): Todos -1 HP, no curar</div>
+                        <div class="boss-defeat"><strong>Derrota:</strong> Si llega a 0 HP</div>
+                    </div>
+
+                    <div class="card boss-card">
+                        <div class="boss-header">
+                            <span>💀</span>
+                            <span>Bruja del Pantano</span>
+                        </div>
+                        <div class="boss-stat">HP: 20 | Dificultad: Media</div>
+                        <div class="boss-effect"><strong>Efecto:</strong>
